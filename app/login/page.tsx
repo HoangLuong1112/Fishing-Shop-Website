@@ -1,11 +1,13 @@
+import Image from "next/image"
+
 export default function Login() {
     return (
         <div className="bg-gray-200 h-screen flex items-center justify-center">
 
-            <div className="w-[1000px] h-[500px] m-4 flex flex-row justify-between border-2 border-blue-500 bg-gray-400">
-                <div className="bg-green-400">
-                    wge
-                </div>
+            <div className="w-[1000px] h-[500px] m-4 grid grid-cols-2 gap-4 border-2 border-blue-500 bg-gray-400">
+
+                <Image alt="login-picture" src="/image/fish.jpg" width={400} height={300} className="w-fit h-[500px] object-cover" loading="eager"/>
+
                 <div className="bg-green-400">
                     gew
                 </div>
