@@ -9,7 +9,24 @@ export default function Login() {
                 <Image alt="login-picture" src="/image/fish.jpg" width={400} height={300} className="w-fit h-[500px] object-cover" loading="eager"/>
 
                 <div className="bg-green-400">
-                    gew
+                    <label className="text-lg">tên đăng nhập</label>
+                    <input className="h-11 bg-gray-100 px-3 outline-none" />
+
+                    <label className="text-lg">mật khẩu</label>
+                    <input type="password" className="h-11 bg-gray-100 px-3 outline-none" />
+
+                    <div className="flex items-center text-sm mt-1">
+                        <input type="checkbox" />
+                        <span className="ml-2">Ghi nhớ đăng nhập</span>
+                    </div>
+
+                    <button className="h-14 bg-lime-400 text-2xl hover:bg-lime-500 transition">
+                        Đăng nhập
+                    </button>
+
+                    <button className="h-14 bg-lime-400 text-2xl hover:bg-lime-500 transition">
+                        Đăng ký
+                    </button>
                 </div>
             </div>
 
