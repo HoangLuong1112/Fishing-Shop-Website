@@ -1,50 +1,49 @@
-import Image from "next/image"
-import Link from "next/link"
+import LoginForm from "@/app/components/LoginForm"
+import { createClient } from "@/utils/supabase/server"
+import { cookies } from "next/headers"
+import { redirect } from "next/navigation"
 
 export default function Login() {
+
+    // Server Action xử lý đăng nhập
+    async function handleLogin(formData: FormData) {
+        'use server'
+
+        const email = formData.get('email') as string
+        const password = formData.get('password') as string
+
+        const cookieStore = await cookies()
+        const supabase = createClient(cookieStore)
+
+        // gọi api đăng nhập của supabase
+        const { data, error } = await supabase.auth.signInWithPassword({
+            email,
+            password
+        })
+
+        if (error) {
+            return { error: error.message }
+        }
+
+        // lấy role diều hướng trang
+        const { data: profile } = await supabase
+            .from('User')
+            .select('role')
+            .eq('id', data.user.id)
+            .single()
+
+        const role = profile?.role || 'client'
+        if (role === 'admin') redirect('/admin')
+        if (role === 'manager') redirect('/manager')
+        if (role === 'employee') redirect('/manager')
+        redirect('/')
+    }
+
     return (
         <div className="bg-[#38384C] h-screen flex items-center justify-center">
 
-            <form className="w-250 h-auto m-4 grid md:grid-cols-2 bg-white border-4 border-white rounded-lg overflow-hidden">
-                <div className="relative w-full h-full">
-                    <Image 
-                        alt="login-picture" 
-                        src="/image/fish.jpg" 
-                        fill // Tự động tràn hết thẻ cha
-                        className="object-cover" 
-                        sizes="(max-width: 1000px) 50vw, 500px" // Tối ưu hóa kích thước ảnh dựa trên kích thước màn hình (cho cái tt fill)
-                        loading="eager" //ưu tiên tải ảnh này trước khi hiển thị trang
-                    />
-                </div>
-
-                <div className="bg-[#C1E6FF] flex flex-col gap-4 p-4">
-                    <p className="text-4xl font-bold py-5">Welcome to Fishing Shop</p>
-
-                    <div>
-                        <label className="text-lg">Tên đăng nhập</label>
-                        <input className="text-lg bg-white h-11 w-full" />
-                    </div>
-                    <div>
-                        <label className="text-lg">Mật khẩu</label>
-                        <input type="password" className="text-lg bg-white h-11 w-full" />
-                    </div>
-                    <div className="flex items-center text-sm mt-1">
-                        <input type="checkbox" />
-                        <span className="ml-2">Ghi nhớ đăng nhập</span>
-                    </div>
-
-                    <button className="h-12 text-2xl bg-blue-400 hover:bg-blue-500 transition">Đăng nhập</button>
-                    <Link href="/create-new-account" className="h-12 text-2xl bg-blue-400 hover:bg-blue-500 transition flex items-center justify-center">
-                        Đăng ký
-                    </Link>
-                    
-                    <Link href="/forgot-password" className="text-sm text-blue-500 hover:text-blue-700 underline">
-                        Quên mật khẩu?
-                    </Link>
-                </div>
-
-            </form>
-
+            <LoginForm action={handleLogin} />
+            
         </div>
     )
 }
