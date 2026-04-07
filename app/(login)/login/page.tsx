@@ -5,7 +5,7 @@ import { redirect } from "next/navigation"
 
 export default function Login() {
 
-    // Server Action xử lý đăng nhập
+    // Server Action
     async function handleLogin(formData: FormData) {
         'use server'
 
@@ -41,7 +41,7 @@ export default function Login() {
 
     return (
         <div className="bg-[#38384C] h-screen flex items-center justify-center">
-
+            {/* Tách giao diện với logic ra để dễ kiểm soát server/client render */}
             <LoginForm action={handleLogin} />
             
         </div>

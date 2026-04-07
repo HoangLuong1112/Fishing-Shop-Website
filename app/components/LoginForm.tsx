@@ -56,7 +56,7 @@ export default function LoginForm({ action }: { action: (formData: FormData) => 
                     {isPending ? 'Đang đăng nhập...' : 'Đăng nhập'}
                 </button>
                 
-                <Link href="/create-new-account" className="h-12 text-2xl bg-blue-400 hover:bg-blue-500 transition flex items-center justify-center">
+                <Link href="/signup" className="h-12 text-2xl bg-blue-400 hover:bg-blue-500 transition flex items-center justify-center">
                     Đăng ký
                 </Link>
                 
