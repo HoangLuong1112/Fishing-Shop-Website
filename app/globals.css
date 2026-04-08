@@ -128,3 +128,7 @@
     @apply font-sans;
   }
 }
+
+.container {
+  @apply px-4 lg:px-8 2xl:px-20;
+}

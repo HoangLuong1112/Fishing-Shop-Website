@@ -40,9 +40,9 @@ export async function middleware(request: NextRequest) {
     }
 
     // Chưa login → chặn toàn bộ (trừ /login)
-    // if (!user && url.pathname !== '/login') {
-    //     return NextResponse.redirect(new URL('/login', request.url))
-    // }
+    if (!user && (url.pathname !== '/login' && url.pathname !== '/' && url.pathname !== '/test')) {
+        return NextResponse.redirect(new URL('/login', request.url))
+    }
 
     let role = 'client'
 
