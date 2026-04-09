@@ -1,5 +1,5 @@
-import LogoutButton from './components/LogoutButton'
 import { getCurrentUser } from './actions/getCurrentUser'
+import LogoutButton from './components/LogoutButton'
 import NavigationBar from './components/NavigationBar'
 
 export default async function Page() {
@@ -20,9 +20,10 @@ export default async function Page() {
 						<div>{user2?.profile?.role}</div>
 						<div>{user2?.role}</div>
 					</div>
-				<LogoutButton />
 				</>
 			)}
+
+			<LogoutButton />
 
 		</main>
 	)

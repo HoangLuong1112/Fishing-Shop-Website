@@ -3,41 +3,28 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import LinkButton from "./LinkButton";
-import { createClient } from "@/utils/supabase/client";
+import LogoutButton from "./LogoutButton";
+import { useUser } from "../actions/useUser";
 
 export default function NavigationBar() {
     const [isScrolled, setIsScrolled] = useState(false);
-    const [user, setUser] = useState<any>(null);
+    const {user, loading} = useUser()
 
     useEffect(() => {
-        const supabase = createClient()
-
         // scroll
         const handleScroll = () => {
             setIsScrolled(window.scrollY > 20);
         };
         window.addEventListener("scroll", handleScroll);
 
-        // get user
-        const getUser = async () => {
-            const { data } = await supabase.auth.getUser();
-            setUser(data.user);
-        };
-
-        getUser();
-
-        // listen login/logout
-        const { data: listener } = supabase.auth.onAuthStateChange(
-            (_, session) => {
-                setUser(session?.user ?? null);
-            }
-        );
-
         return () => {
             window.removeEventListener("scroll", handleScroll);
-            listener.subscription.unsubscribe();
         };
     }, []);
+
+    useEffect(() => {
+        console.log("user updated:", user);
+    }, [user]);
 
     return (
         <nav className={`fixed top-0 left-0 right-0 z-100 transition-all duration-300 border-b-2 border-black
@@ -59,11 +46,17 @@ export default function NavigationBar() {
                         </div>
                     </div>
 
-                    {user ? (
-                        <LinkButton text="Profile" href="/profile" />
-                    ) : (
-                        <LinkButton text="Đăng nhập" href="/login" />
+                    {!loading && (
+                        user ? (
+                            <div className="flex gap-3 bg-red-300">
+                                <LinkButton text="Profile" href="/profile" />
+                                <LogoutButton />
+                            </div>
+                        ) : (
+                            <LinkButton text="Đăng nhập" href="/login" />
+                        )
                     )}
+
                 </div>
             </div>
         </nav>
