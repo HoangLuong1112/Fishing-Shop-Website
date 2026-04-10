@@ -5,7 +5,7 @@ import NavigationBar from './components/NavigationBar'
 export default async function Page() {
 
 	const user2 = await getCurrentUser()
-	console.log("user?: ", user2)
+	// console.log("user?: ", user2)
 
 	return (
 		<main className="p-10">
