@@ -129,6 +129,6 @@
   }
 }
 
-.container {
-  @apply px-4 lg:px-8 2xl:px-20;
+.spacing {
+  @apply px-10 lg:px-40 2xl:px-60;
 }
