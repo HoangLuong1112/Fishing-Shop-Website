@@ -24,15 +24,24 @@ import {
 import { startTransition } from "react";
 import { logout } from "../actions/logout";
 
+export type UserProfile = {
+    id?: string;
+    username?: string;
+    email?: string;
+    role?: string;
+    is_active?: boolean;
+    created_at?: string;
+    avatar_url?: string;
+}
+
 interface UserNavigationProps {
     user: {
-        name?: string;
-        email?: string;
-        image?: string;
+        profile : UserProfile;
     };
 }
 
 export default function UserNavigation({ user }: UserNavigationProps) {
+    console.log("UserNavigation rendered with user:", user);
     return (
         <DropdownMenu>
             {/* Nút kích hoạt dạng viên thuốc */}
@@ -40,9 +49,9 @@ export default function UserNavigation({ user }: UserNavigationProps) {
                 <button className="flex items-center gap-2 p-1 pr-3 rounded-full border border-gray-200 hover:bg-gray-50 transition-all shadow-sm focus:outline-none">
                 {/* Bên trái: Avatar */}
                 <Avatar className="h-8 w-8">
-                    <AvatarImage src={user?.image} alt={user?.name} />
+                    <AvatarImage src={user?.profile.avatar_url} alt={user?.profile.username} />
                     <AvatarFallback className="bg-blue-500 text-white text-xs">
-                    {user?.name?.charAt(0) || "U"}
+                        {user?.profile.username?.charAt(0) || "U"}
                     </AvatarFallback>
                 </Avatar>
                 
@@ -55,9 +64,9 @@ export default function UserNavigation({ user }: UserNavigationProps) {
             <DropdownMenuContent className="w-56" align="end" forceMount>
                 <DropdownMenuLabel className="font-normal">
                 <div className="flex flex-col space-y-1">
-                    <p className="text-sm font-medium leading-none">{user?.name}</p>
+                    <p className="text-sm font-medium leading-none">{user?.profile.username}</p>
                     <p className="text-xs leading-none text-muted-foreground">
-                    {user?.email}
+                    {user?.profile.email}
                     </p>
                 </div>
                 </DropdownMenuLabel>
