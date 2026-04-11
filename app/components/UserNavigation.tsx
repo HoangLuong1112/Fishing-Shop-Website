@@ -21,8 +21,7 @@ import {
     AvatarFallback, 
     AvatarImage 
 } from "@/components/ui/avatar";
-import { startTransition } from "react";
-import { logout } from "../actions/logout";
+import { useLogout } from "@/hooks/useLogout";
 
 export type UserProfile = {
     id?: string;
@@ -41,7 +40,9 @@ interface UserNavigationProps {
 }
 
 export default function UserNavigation({ user }: UserNavigationProps) {
-    console.log("UserNavigation rendered with user:", user);
+    // console.log("UserNavigation rendered with user:", user);
+    const { handleLogout } = useLogout()
+
     return (
         <DropdownMenu>
             {/* Nút kích hoạt dạng viên thuốc */}
@@ -90,12 +91,7 @@ export default function UserNavigation({ user }: UserNavigationProps) {
 
                 <DropdownMenuSeparator />
                 
-                <DropdownMenuItem
-                    onClick={() => {
-                        startTransition(() => {
-                            logout()
-                        })
-                    }}
+                <DropdownMenuItem onClick={handleLogout}
                     className="text-red-600 focus:bg-red-50 focus:text-red-600">
                     <LogOut className="mr-2 h-4 w-4" />
                     <span>Đăng xuất</span>

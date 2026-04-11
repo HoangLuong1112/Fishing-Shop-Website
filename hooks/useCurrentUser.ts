@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { createClient } from "@/utils/supabase/client";
 
 // đây là cái hook lấy user info từ session, đồng thời fetch thêm profile info từ bảng User
+// OFF
 export function useCurrentUser() {
     const [user, setUser] = useState<any>(null);
     const [loading, setLoading] = useState(true);

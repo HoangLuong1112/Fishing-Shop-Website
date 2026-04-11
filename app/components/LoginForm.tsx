@@ -1,12 +1,14 @@
 'use client'
 import Image from "next/image"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useTransition } from "react"
 import { toast } from "sonner"
 
 export default function LoginForm({ action }: { action: (formData: FormData) => Promise<any> }) {
     
     const [isPending, startTransition] = useTransition()
+    const router = useRouter()
 
     function onSubmit(formData: FormData) {
         startTransition(async () => {
@@ -16,7 +18,15 @@ export default function LoginForm({ action }: { action: (formData: FormData) => 
                 toast.error('Đăng nhập thất bại', {
                     description: result.error,
                 })
+                return
             }
+
+            router.refresh()
+
+            // điều hướng theo role
+            if (result.role === 'admin') router.push('/admin')
+            else if (result.role === 'manager') router.push('/manager')
+            else router.push('/')
         })
     }
     

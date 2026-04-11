@@ -1,7 +1,6 @@
 import LoginForm from "@/app/components/LoginForm"
 import { createClient } from "@/utils/supabase/server"
 import { cookies } from "next/headers"
-import { redirect } from "next/navigation"
 
 export default function Login() {
 
@@ -33,10 +32,8 @@ export default function Login() {
             .single()
 
         const role = profile?.role || 'client'
-        if (role === 'admin') redirect('/admin')
-        if (role === 'manager') redirect('/manager')
-        if (role === 'employee') redirect('/manager')
-        redirect('/')
+
+        return { success: true, role }
     }
 
     return (
