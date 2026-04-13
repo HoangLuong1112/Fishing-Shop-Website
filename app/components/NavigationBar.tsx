@@ -38,7 +38,7 @@ export default function NavigationBar() {
     <>
         <div className={`mb-16 ${hide ? "hidden" : ""}`} />
         <nav className={`fixed h-16 top-0 left-0 right-0 z-50 transition-all duration-300 border-b-2
-            ${isScrolled ? "bg-blue-950 text-white border-amber-100" : "bg-blue-300 text-black border-black"}
+            ${isScrolled ? "bg-blue-950 text-white border-blue-950" : "bg-blue-300 text-black border-black"}
             ${hide ? "hidden" : ""}`}
         >
             <div className="w-full py-2">
