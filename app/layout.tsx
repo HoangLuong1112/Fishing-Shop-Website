@@ -50,9 +50,7 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
 			<body className="min-h-full flex flex-col">
 				<AuthProvider initialUser={fullUser}>
 					<NavigationBar />
-					<div className="pt-16">
-						{children}
-					</div>
+					{children}
 				</AuthProvider>
 				<Toaster />
 			</body>

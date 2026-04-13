@@ -1,11 +1,11 @@
 import Sidebar, { SidebarItem } from "@/app/components/Sidebar";
 
 const managerSidebar: SidebarItem[] = [
-    { title: "Quản lý sản phẩm", href: "/admin/ebola"},
-    { title: "Quản lý nhân sự", href: "/admin/data" },
-    { title: "Quản lý kho hàng", href: "/admin/data" },
-    { title: "Quản lý đơn hàng", href: "/admin/data" },
-    { title: "Thống kê", href: "/admin/data" }, 
+    { title: "Quản lý sản phẩm", href: "/manager/products"},
+    { title: "Quản lý nhân sự", href: "/manager/human-resources" },
+    { title: "Quản lý kho hàng", href: "/manager/stocks" },
+    { title: "Quản lý đơn hàng", href: "/manager/orders" },
+    { title: "Thống kê", href: "/manager/statistics" }, 
 ];
 
 export default function ManagerLayout({ children }: { children: React.ReactNode }) {

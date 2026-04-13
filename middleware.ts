@@ -40,7 +40,14 @@ export async function middleware(request: NextRequest) {
     }
 
     // Chưa login → chặn toàn bộ (trừ /login)
-    if (!user && (url.pathname !== '/login' && url.pathname !== '/' && url.pathname !== '/test')) {
+    if (!user && (
+        url.pathname !== '/login' && 
+        url.pathname !== '/' && 
+        url.pathname !== '/test' &&
+        url.pathname !== '/forgot-password' &&
+        url.pathname !== '/reset-password' &&
+        url.pathname !== '/signup'
+    )) {
         return NextResponse.redirect(new URL('/login', request.url))
     }
 

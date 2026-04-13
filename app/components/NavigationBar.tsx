@@ -7,10 +7,20 @@ import { useAuth } from "../provider/AuthProvider";
 import Image from "next/image";
 import SearchBar from "./SearchBar";
 import UserNavigation from "./UserNavigation";
+import { usePathname } from "next/navigation";
 
 export default function NavigationBar() {
     const [isScrolled, setIsScrolled] = useState(false);
     const { user } = useAuth()
+
+    let hide = false
+    const pathname = usePathname()
+    if (pathname.startsWith("/login") || 
+        pathname.startsWith("/forgot-password") || 
+        pathname.startsWith("/reset-password") || 
+        pathname.startsWith("/signup")) {
+        hide = true
+    }
 
     useEffect(() => {
         // scroll
@@ -25,8 +35,11 @@ export default function NavigationBar() {
     }, []);
 
     return (
+    <>
+        <div className={`mb-16 ${hide ? "hidden" : ""}`} />
         <nav className={`fixed h-16 top-0 left-0 right-0 z-50 transition-all duration-300 border-b-2
-            ${isScrolled ? "bg-blue-950 text-white border-amber-100" : "bg-blue-300 text-black border-black"}`}
+            ${isScrolled ? "bg-blue-950 text-white border-amber-100" : "bg-blue-300 text-black border-black"}
+            ${hide ? "hidden" : ""}`}
         >
             <div className="w-full py-2">
                 <div className="flex justify-between items-center spacing">
@@ -60,5 +73,6 @@ export default function NavigationBar() {
                 </div>
             </div>
         </nav>
+    </>
     );
 }
