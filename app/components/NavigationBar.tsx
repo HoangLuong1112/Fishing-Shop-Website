@@ -25,8 +25,8 @@ export default function NavigationBar() {
     }, []);
 
     return (
-        <nav className={`fixed top-0 left-0 right-0 z-100 transition-all duration-300 border-b-2 border-black
-            ${isScrolled ? "bg-green-300" : "bg-red-200"}`}
+        <nav className={`fixed h-16 top-0 left-0 right-0 z-50 transition-all duration-300 border-b-2
+            ${isScrolled ? "bg-blue-950 text-white border-amber-100" : "bg-blue-300 text-black border-black"}`}
         >
             <div className="w-full py-2">
                 <div className="flex justify-between items-center spacing">

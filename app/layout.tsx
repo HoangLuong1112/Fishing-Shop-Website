@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { AuthProvider } from "./provider/AuthProvider";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
+import NavigationBar from "./components/NavigationBar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,7 +49,10 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
 		<html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
 			<body className="min-h-full flex flex-col">
 				<AuthProvider initialUser={fullUser}>
-					{children}
+					<NavigationBar />
+					<div className="pt-16">
+						{children}
+					</div>
 				</AuthProvider>
 				<Toaster />
 			</body>

@@ -22,6 +22,7 @@ import {
     AvatarImage 
 } from "@/components/ui/avatar";
 import { useLogout } from "@/hooks/useLogout";
+import Link from "next/link";
 
 export type UserProfile = {
     id?: string;
@@ -75,14 +76,14 @@ export default function UserNavigation({ user }: UserNavigationProps) {
                 <DropdownMenuSeparator />
 
                 <DropdownMenuGroup>
+                    <Link href={'/profile'}>
                     <DropdownMenuItem>
-                        <User className="mr-2 h-4 w-4" />
-                        <span>Hồ sơ</span>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                        <CreditCard className="mr-2 h-4 w-4" />
-                        <span>Gói đăng ký</span>
-                    </DropdownMenuItem>
+                        
+                            <User className="mr-2 h-4 w-4" />
+                            <span>Hồ sơ</span>
+                        
+                        
+                    </DropdownMenuItem></Link>
                     <DropdownMenuItem>
                         <Settings className="mr-2 h-4 w-4" />
                         <span>Cài đặt</span>
