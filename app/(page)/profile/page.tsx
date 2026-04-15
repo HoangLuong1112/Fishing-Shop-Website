@@ -76,9 +76,6 @@ export default function ProfilePage() {
 
                 // chỉ khi upload OK → mới xóa file cũ
                 if (profile.avatar_url) {
-                    // const oldPath = profile.avatar_url
-                    //     ?.split("/avatars/")[1]
-                    //     ?.split("?")[0];
                     const oldPath = profile.avatar_url
                         ?.split("/storage/v1/object/public/main/")[1]
                         ?.split("?")[0];

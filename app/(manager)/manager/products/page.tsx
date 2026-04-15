@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { 
     Search, 
     Plus, 
@@ -12,10 +12,13 @@ import {
     CheckCircle2,
     XCircle
 } from "lucide-react";
+import Link from "next/link";
+import { getProducts } from "@/app/actions/productAction";
 
 interface Product {
-    id_product: string;
-    id_category: string;
+    id: string;
+    id_category?: string
+    category_name: string;
     product_name: string;
     description: string;
     price: number;
@@ -24,44 +27,42 @@ interface Product {
     status: boolean;
 }
 
-// 1. Tạo 20 mockup dữ liệu
-// const MOCK_DATA: Product[] = Array.from({ length: 20 }).map((_, i) => ({
-//   id_product: `PROD${(i + 1).toString().padStart(3, '0')}`,
-//   id_category: i % 3 === 0 ? "LAPTOP" : i % 3 === 1 ? "PHONE" : "TABLET",
-//   product_name: `Sản phẩm mẫu số ${i + 1}`,
-//   description: `Mô tả chi tiết cho sản phẩm ${i + 1}, hỗ trợ đa tính năng và hiệu năng cao.`,
-//   price: Math.floor(Math.random() * 20000000) + 1000000,
-//   stock_quantity: Math.floor(Math.random() * 100),
-//   image_url: `https://picsum.photos/seed/${i + 1}/50`,
-//   status: Math.random() > 0.3,
-// }));
-
 const MOCK_DATA: Product[] = [
-    {id_product: "PROD001",id_category: "CAT01",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
-    {id_product: "PROD002",id_category: "CAT02",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
-    {id_product: "PROD003",id_category: "CAT01",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
-    {id_product: "PROD004",id_category: "CAT02",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
-    {id_product: "PROD005",id_category: "CAT01",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
-    {id_product: "PROD006",id_category: "CAT02",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
-    {id_product: "PROD007",id_category: "CAT01",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
-    {id_product: "PROD008",id_category: "CAT02",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
-    {id_product: "PROD009",id_category: "CAT01",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
-    {id_product: "PROD010",id_category: "CAT02",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
-    {id_product: "PROD011",id_category: "CAT01",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
-    {id_product: "PROD012",id_category: "CAT02",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
-    {id_product: "PROD013",id_category: "CAT01",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
-    {id_product: "PROD014",id_category: "CAT02",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
-    {id_product: "PROD015",id_category: "CAT01",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
-    {id_product: "PROD016",id_category: "CAT02",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
-    {id_product: "PROD017",id_category: "CAT01",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
-    {id_product: "PROD018",id_category: "CAT02",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
-    {id_product: "PROD019",id_category: "CAT01",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
-    {id_product: "PROD020",id_category: "CAT02",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
-    {id_product: "PROD021",id_category: "CAT01",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
-    {id_product: "PROD022",id_category: "CAT02",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
+    {id: "01",category_name: "Cần câu",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
+    {id: "02",category_name: "Cần câu",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "",status: false,},
+    {id: "03",category_name: "Bạch ngọc thử, Cẩu tẩu phanh, sực xí quách ",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: '',status: true,},
+    {id: "04",category_name: "Cần câu",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
+    {id: "05",category_name: "Cần câu",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
+    {id: "06",category_name: "Cần câu",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
+    {id: "07",category_name: "Cần câu",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
+    {id: "08",category_name: "Cần câu",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
+    {id: "09",category_name: "Cần câu",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
+    {id: "10",category_name: "Cần câu",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "https://picsum.photos/50",status: false,},
 ];
 
 export default function ProductManagement() {
+
+    // TEST
+    const [products, setProducts] = useState<Product[]>([]);
+    const [isLoading, setIsLoading] = useState(true);
+
+    // Sử dụng useEffect để kích hoạt việc gọi API khi trang vừa load
+    useEffect(() => {
+        async function loadData() {
+            try {
+                setIsLoading(true);
+                const data = await getProducts();
+                setProducts(data);
+            } catch (err) {
+                console.error("Lỗi:", err);
+            } finally {
+                setIsLoading(false);
+            }
+        }
+        loadData();
+    }, []); // Mảng rỗng [] đảm bảo hàm này chỉ chạy 1 lần duy nhất
+    ////////////////////////////////////////
+
     // State cho lọc và tìm kiếm
     const [searchTerm, setSearchTerm] = useState("");
     
@@ -73,7 +74,7 @@ export default function ProductManagement() {
     const filteredData = useMemo(() => {
         return MOCK_DATA.filter(p => 
             p.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            p.id_product.toLowerCase().includes(searchTerm.toLowerCase())
+            p.id.toLowerCase().includes(searchTerm.toLowerCase())
         );
     }, [searchTerm]);
 
@@ -137,18 +138,20 @@ export default function ProductManagement() {
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {currentItems.map((product) => (
-                                <tr key={product.id_product} className="hover:bg-slate-50 cursor-pointer transition-colors group">
+                                <tr key={product.id} className="hover:bg-slate-50 cursor-pointer transition-colors group">
                                     <td className="p-4">
-                                        <div className="flex items-center gap-3">
-                                            <img src={product.image_url} alt="" className="w-10 h-10 rounded-md object-cover border border-slate-200" />
+                                        <Link href={`/manager/products/${product.id}`} className="flex items-center gap-3 hover:bg-slate-300 transition-colors rounded-md overflow-hidden">
+                                            {product.image_url && (
+                                                <img src={product.image_url} alt="" className="w-10 h-10 rounded-md object-cover border border-slate-200" />
+                                            )}
                                             <div>
                                                 <div className="font-medium text-slate-900 text-sm group-hover:text-blue-600 transition-colors">{product.product_name}</div>
-                                                <div className="text-xs text-slate-400 truncate max-w-37.5">{product.description}</div>
+                                                <div className="text-xs text-slate-700 truncate max-w-40">{product.description}</div>
                                             </div>
-                                        </div>
+                                        </Link>
                                     </td>
-                                    <td className="p-4 text-xs text-slate-500 font-mono text-center">{product.id_product}</td>
-                                    <td className="p-4 text-sm text-slate-600">{product.id_category}</td>
+                                    <td className="p-4 text-xs text-slate-500 font-mono text-center">{product.id}</td>
+                                    <td className="p-4 text-sm text-slate-600 max-w-40">{product.category_name}</td>
                                     <td className="p-4 text-sm text-slate-900 font-bold text-right">{product.price.toLocaleString('vi-VN')}đ</td>
                                     <td className="p-4 text-sm text-center font-medium">{product.stock_quantity}</td>
                                     <td className="p-4">

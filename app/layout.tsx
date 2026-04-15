@@ -42,7 +42,7 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
 		fullUser = { ...user, profile };
 	}
 
-	console.log("SERVER USER:", fullUser)
+	// console.log("SERVER USER:", fullUser)
 	
 
 	return (

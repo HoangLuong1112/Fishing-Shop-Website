@@ -1,6 +1,5 @@
 import { getCurrentUser } from './actions/getCurrentUser'
 import LogoutButton from './components/LogoutButton'
-import NavigationBar from './components/NavigationBar'
 
 export default async function Page() {
 
@@ -9,7 +8,6 @@ export default async function Page() {
 
 	return (
 		<main className="p-10">
-			{/* <NavigationBar /> */}
 			<h1 className="text-5xl font-bold mb-4">Main Page</h1>
 
 			{user2 && (
