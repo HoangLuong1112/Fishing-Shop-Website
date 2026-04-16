@@ -25,32 +25,29 @@ export async function getProducts(): Promise<Product[]> {
     // const supabase = await createClient(cookieStore)
     const supabase = await createClient()
 
-    // Query sử dụng syntax join của Supabase: Category(...) 
-    // Nó sẽ lấy thông tin từ bảng Category dựa trên FK Id_Category
-    // c
-    
     const { data, error } = await supabase
         .from("Product")
         .select(`
-        id:id,
-        id_category:id_category,
-        product_name:product_name,
-        description,
-        price,
-        stock_quantity,
-        image_url,
-        status,
-        Category (
-            category_name:Category_name
-        )
+            id,
+            id_category,
+            product_name:product_name,
+            description,
+            price,
+            stock_quantity,
+            image_url,
+            status,
+            Category (
+                category_name
+            )
         `);
+        
 
     if (error) {
         console.error("Error fetching products:", error);
         return [];
     }
 
-    console.log("Fetched products with categories:", data);
+    // console.log("Fetched products with categories:", data);
 
     // Map lại data để phẳng hóa (flatten) object Category theo interface của bạn
     return (data as any[]).map((item) => ({
