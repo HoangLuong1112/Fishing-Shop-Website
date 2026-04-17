@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 
-interface Product {
+export interface Product {
     id: string;
     id_category?: string;
     category_name: string;
@@ -32,17 +32,64 @@ export default function ProductPage({ initialData }: { initialData: Product[] })
 
     // search
     const [searchTerm, setSearchTerm] = useState("");
+    const [categoryFilter, setCategoryFilter] = useState<string>("all");
+    const [statusFilter, setStatusFilter] = useState<string>("true"); 
+    const [priceSort, setPriceSort] = useState<string>("none");
+    const [stockSort, setStockSort] = useState<string>("none");
 
     // pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [pageSize, setPageSize] = useState(10);
 
+    // lấy danh sách category
+    const categories = useMemo(() => {
+        const set = new Set(products.map(p => p.category_name));
+        return Array.from(set);
+    }, [products]);
+
+    // search + filter + sort
+    // memo: mỗi khi render, filter chạy lại
     const filteredData = useMemo(() => {
-        return products.filter(p =>
-            p.product_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-            p.id.toLowerCase().includes(searchTerm.toLowerCase())
-        );
-    }, [searchTerm, products]);
+        let result = [...products];
+
+        const keyword = searchTerm.trim().toLowerCase();
+
+        // search
+        if (keyword) {
+            result = result.filter(p => {
+                const name = p.product_name?.toLowerCase() || "";
+                const id = String(p.id).toLowerCase();
+                return name.includes(keyword) || id.includes(keyword);
+            });
+        }
+
+        // filter category
+        if (categoryFilter !== "all") {
+            result = result.filter(p => p.category_name === categoryFilter);
+        }
+
+        // filter status
+        if (statusFilter !== "all") {
+            const statusBool = statusFilter === "true";
+            result = result.filter(p => p.status === statusBool);
+        }
+
+        // sort price
+        if (priceSort === "asc") {
+            result.sort((a, b) => a.price - b.price);
+        } else if (priceSort === "desc") {
+            result.sort((a, b) => b.price - a.price);
+        }
+
+        // sort stock
+        if (stockSort === "asc") {
+            result.sort((a, b) => a.stock_quantity - b.stock_quantity);
+        } else if (stockSort === "desc") {
+            result.sort((a, b) => b.stock_quantity - a.stock_quantity);
+        }
+
+        return result;
+    }, [products, searchTerm, categoryFilter, statusFilter, priceSort, stockSort]);
 
     const totalPages = Math.ceil(filteredData.length / pageSize);
     const startIndex = (currentPage - 1) * pageSize;
@@ -82,10 +129,50 @@ export default function ProductPage({ initialData }: { initialData: Product[] })
                         onChange={handleSearch}
                     />
                 </div>
-                <button className="flex items-center gap-2 px-4 py-2 border rounded-lg">
-                    <Filter size={16} />
-                    Lọc
-                </button>
+                {/* Category */}
+                <select
+                    value={categoryFilter}
+                    onChange={(e) => setCategoryFilter(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                >
+                    <option value="all">Tất cả danh mục</option>
+                    {categories.map(c => (
+                        <option key={c} value={c}>{c}</option>
+                    ))}
+                </select>
+
+                {/* Status */}
+                <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                >
+                    <option value="all">Tất cả trạng thái</option>
+                    <option value="true">Đang bán</option>
+                    <option value="false">Hết hàng</option>
+                </select>
+
+                {/* Price sort */}
+                <select
+                    value={priceSort}
+                    onChange={(e) => setPriceSort(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                >
+                    <option value="none">Giá</option>
+                    <option value="asc">Thấp → Cao</option>
+                    <option value="desc">Cao → Thấp</option>
+                </select>
+
+                {/* Stock sort */}
+                <select
+                    value={stockSort}
+                    onChange={(e) => setStockSort(e.target.value)}
+                    className="border rounded-lg px-3 py-2 text-sm"
+                >
+                    <option value="none">Tồn kho</option>
+                    <option value="asc">Ít → Nhiều</option>
+                    <option value="desc">Nhiều → Ít</option>
+                </select>
             </div>
 
             {/* Table */}

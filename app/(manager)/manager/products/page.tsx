@@ -1,19 +1,6 @@
 import { getProducts } from "@/app/actions/productAction";
-import ProductInterface from "./ProductInterface";
+import ProductInterface, { Product } from "./ProductInterface";
 
-interface Product {
-    id: string;
-    id_category?: string;
-    category_name: string;
-    product_name: string;
-    description: string;
-    price: number;
-    stock_quantity: number;
-    image_url: string;
-    status: boolean;
-}
-
-// 👉 giữ mock ở đây
 const MOCK_DATA: Product[] = [
     {id: "01",category_name: "Cần câu",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},
     {id: "02",category_name: "Cần câu",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "",status: false,},

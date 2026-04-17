@@ -1,28 +1,11 @@
 // "use server";
 
-// import { createClient } from "@/utils/supabase/server"; 
 import { createClient } from "@/utils/supabase/client";
-// import { revalidatePath } from "next/cache";
-// import { cookies } from "next/headers";
+import { revalidatePath } from "next/cache";
+import { Product } from "../(manager)/manager/products/ProductInterface";
 
-interface Product {
-  id: string;
-  id_category?: string;
-  category_name: string;
-  product_name: string;
-  description: string;
-  price: number;
-  stock_quantity: number;
-  image_url: string;
-  status: boolean;
-}
-
-/**
- * Lấy danh sách sản phẩm kèm tên danh mục
- */
+/*Lấy danh sách sản phẩm kèm tên danh mục*/
 export async function getProducts(): Promise<Product[]> {
-    // const cookieStore = await cookies()
-    // const supabase = await createClient(cookieStore)
     const supabase = await createClient()
 
     const { data, error } = await supabase
@@ -49,7 +32,6 @@ export async function getProducts(): Promise<Product[]> {
 
     // console.log("Fetched products with categories:", data);
 
-    // Map lại data để phẳng hóa (flatten) object Category theo interface của bạn
     return (data as any[]).map((item) => ({
         id: item.id,
         id_category: item.id_category,
@@ -63,55 +45,48 @@ export async function getProducts(): Promise<Product[]> {
     }));
 }
 
-// /**
-//  * Thêm sản phẩm mới
-//  */
-// export async function addProduct(formData: Omit<Product, "id" | "category_name">) {
-//   const supabase = await createClient();
+//  Thêm sản phẩm mới
+export async function addProduct(formData: Omit<Product, "id" | "category_name">) {
+    const supabase = await createClient();
 
-//   const { data, error } = await supabase
-//     .from("Product")
-//     .insert([
-//       {
-//         Id_Category: formData.id_category,
-//         Product_name: formData.product_name,
-//         description: formData.description,
-//         price: formData.price,
-//         stock_quantity: formData.stock_quantity,
-//         image_url: formData.image_url,
-//         status: formData.status,
-//       },
-//     ])
-//     .select();
+    const { data, error } = await supabase
+        .from("Product")
+        .insert([
+            {
+                id_category: formData.id_category,
+                product_name: formData.product_name,
+                description: formData.description,
+                price: formData.price,
+                stock_quantity: formData.stock_quantity,
+                image_url: formData.image_url,
+                status: formData.status,
+            },
+        ]).select();
 
-//   if (error) throw new Error(error.message);
-  
-//   revalidatePath("/"); // Cập nhật lại cache cho trang chủ hoặc trang danh sách
-//   return data;
-// }
+    if (error) throw new Error(error.message);
+    
+    revalidatePath("/manager/products"); // Cập nhật lại cache
+    return data;
+}
 
-// /**
-//  * Sửa thông tin sản phẩm
-//  */
-// export async function updateProduct(id: string, formData: Partial<Product>) {
-//   const supabase = await createClient();
+//  Sửa thông tin sản phẩm
+export async function updateProduct(id: string, formData: Partial<Product>) {
+    const supabase = await createClient();
 
-//   const { data, error } = await supabase
-//     .from("Product")
-//     .update({
-//       Id_Category: formData.id_category,
-//       Product_name: formData.product_name,
-//       description: formData.description,
-//       price: formData.price,
-//       stock_quantity: formData.stock_quantity,
-//       image_url: formData.image_url,
-//       status: formData.status,
-//     })
-//     .eq("Id_Product", id)
-//     .select();
+    const { data, error } = await supabase
+        .from("Product")
+        .update({
+            product_name: formData.product_name,
+            description: formData.description,
+            price: formData.price,
+            stock_quantity: formData.stock_quantity,
+            image_url: formData.image_url,
+            status: formData.status,
+        })
+        .eq("id", id).select();
 
-//   if (error) throw new Error(error.message);
+    if (error) throw new Error(error.message);
 
-//   revalidatePath("/"); 
-//   return data;
-// }
+    // revalidatePath("/"); 
+    return data;
+}
