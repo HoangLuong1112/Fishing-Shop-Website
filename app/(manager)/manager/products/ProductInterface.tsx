@@ -47,15 +47,12 @@ export default function ProductPage({ initialData }: { initialData: Product[] })
         return Array.from(set);
     }, [products]);
 
-    // search + filter + sort
-    // memo: mỗi khi render, filter chạy lại
+    // search + filter + sort (memo: mỗi khi render, filter chạy lại)
     const filteredData = useMemo(() => {
         let result = [...products];
-
         const keyword = searchTerm.trim().toLowerCase();
-
-        // search
-        if (keyword) {
+        
+        if (keyword) { // search
             result = result.filter(p => {
                 const name = p.product_name?.toLowerCase() || "";
                 const id = String(p.id).toLowerCase();
@@ -63,31 +60,29 @@ export default function ProductPage({ initialData }: { initialData: Product[] })
             });
         }
 
-        // filter category
-        if (categoryFilter !== "all") {
+        if (categoryFilter !== "all") { // filter category
             result = result.filter(p => p.category_name === categoryFilter);
         }
 
-        // filter status
-        if (statusFilter !== "all") {
+        if (statusFilter !== "all") { // filter status
             const statusBool = statusFilter === "true";
             result = result.filter(p => p.status === statusBool);
         }
 
-        // sort price
-        if (priceSort === "asc") {
+        // default sort by id
+        result.sort((a, b) => Number(a.id) - Number(b.id));
+
+        if (priceSort === "asc") { // sort price
             result.sort((a, b) => a.price - b.price);
         } else if (priceSort === "desc") {
             result.sort((a, b) => b.price - a.price);
         }
 
-        // sort stock
-        if (stockSort === "asc") {
+        if (stockSort === "asc") { // sort stock
             result.sort((a, b) => a.stock_quantity - b.stock_quantity);
         } else if (stockSort === "desc") {
             result.sort((a, b) => b.stock_quantity - a.stock_quantity);
         }
-
         return result;
     }, [products, searchTerm, categoryFilter, statusFilter, priceSort, stockSort]);
 
@@ -108,13 +103,13 @@ export default function ProductPage({ initialData }: { initialData: Product[] })
                 <div>
                     <h1 className="text-2xl font-bold text-slate-900">Danh sách sản phẩm</h1>
                     <p className="text-slate-500 text-sm">
-                        Quản lý tổng số {filteredData.length} sản phẩm
+                        Tổng số {filteredData.length} sản phẩm
                     </p>
                 </div>
-                <button className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
+                <Link href="/manager/products/new" className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg">
                     <Plus size={18} />
                     Thêm sản phẩm
-                </button>
+                </Link>
             </div>
 
             {/* Toolbar */}
@@ -225,15 +220,23 @@ export default function ProductPage({ initialData }: { initialData: Product[] })
                 {/* Pagination */}
                 <div className="p-4 flex justify-between items-center">
                     <div>
-                        {startIndex + 1} - {Math.min(startIndex + pageSize, filteredData.length)} / {filteredData.length}
+                        {startIndex + 1} to {Math.min(startIndex + pageSize, filteredData.length)} on {filteredData.length} products
                     </div>
 
                     <div className="flex gap-2">
-                        <button onClick={() => setCurrentPage(1)}><ChevronsLeft size={16} /></button>
-                        <button onClick={() => setCurrentPage(p => Math.max(p - 1, 1))}><ChevronLeft size={16} /></button>
+                        <button onClick={() => setCurrentPage(1)} className="hover:bg-gray-400 p-1 rounded-4xl transition">
+                            <ChevronsLeft size={16} />
+                        </button>
+                        <button onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} className="hover:bg-gray-400 p-1 rounded-4xl transition">
+                            <ChevronLeft size={16} />
+                        </button>
                         <span>{currentPage} / {totalPages || 1}</span>
-                        <button onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))}><ChevronRight size={16} /></button>
-                        <button onClick={() => setCurrentPage(totalPages)}><ChevronsRight size={16} /></button>
+                        <button onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} className="hover:bg-gray-400 p-1 rounded-4xl transition">
+                            <ChevronRight size={16} />
+                        </button>
+                        <button onClick={() => setCurrentPage(totalPages)} className="hover:bg-gray-400 p-1 rounded-4xl transition">
+                            <ChevronsRight size={16} />
+                        </button>
                     </div>
                 </div>
             </div>

@@ -1,8 +1,25 @@
 // "use server";
 
 import { createClient } from "@/utils/supabase/client";
-import { revalidatePath } from "next/cache";
 import { Product } from "../(manager)/manager/products/ProductInterface";
+
+export async function getCategories() {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("Category")
+        .select(`
+            id,
+            category_name
+        `);
+
+    if (error) {
+        console.error("Error fetching categories:", error);
+        return [];
+    }
+
+    return data;
+}
 
 /*Lấy danh sách sản phẩm kèm tên danh mục*/
 export async function getProducts(): Promise<Product[]> {
@@ -65,7 +82,6 @@ export async function addProduct(formData: Omit<Product, "id" | "category_name">
 
     if (error) throw new Error(error.message);
     
-    revalidatePath("/manager/products"); // Cập nhật lại cache
     return data;
 }
 
@@ -87,6 +103,5 @@ export async function updateProduct(id: string, formData: Partial<Product>) {
 
     if (error) throw new Error(error.message);
 
-    // revalidatePath("/"); 
     return data;
 }
