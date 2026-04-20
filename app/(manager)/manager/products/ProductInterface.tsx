@@ -198,7 +198,11 @@ export default function ProductPage({ initialData }: { initialData: Product[] })
                                             </div>
                                         </Link>
                                     </td>
-                                    <td className="p-4 text-center">{product.id}</td>
+                                    <td className="p-4 text-center">
+                                        <span className="text-xs font-mono bg-slate-100 px-2 py-1 rounded text-slate-600 border">
+                                            {product.id}
+                                        </span>
+                                    </td>
                                     <td className="p-4">{product.category_name}</td>
                                     <td className="p-4 text-right font-bold">
                                         {product.price.toLocaleString("vi-VN")}đ
@@ -218,27 +222,48 @@ export default function ProductPage({ initialData }: { initialData: Product[] })
                 </div>
 
                 {/* Pagination */}
-                <div className="p-4 flex justify-between items-center">
-                    <div>
-                        {startIndex + 1} to {Math.min(startIndex + pageSize, filteredData.length)} on {filteredData.length} products
+                <div className="p-4 flex flex-col sm:flex-row justify-between items-center gap-4 bg-slate-50/50 border-t">
+                    <div className="text-xs font-medium text-slate-500">
+                        Hiển thị {startIndex + 1} - {Math.min(startIndex + pageSize, filteredData.length)} / {filteredData.length}
                     </div>
 
-                    <div className="flex gap-2">
-                        <button onClick={() => setCurrentPage(1)} className="hover:bg-gray-400 p-1 rounded-4xl transition">
+                    <div className="flex items-center gap-1.5">
+                        <button 
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(1)} 
+                            className="p-1.5 border rounded-md bg-white hover:bg-slate-50 disabled:opacity-30 transition shadow-sm"
+                        >
                             <ChevronsLeft size={16} />
                         </button>
-                        <button onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} className="hover:bg-gray-400 p-1 rounded-4xl transition">
+                        <button 
+                            disabled={currentPage === 1}
+                            onClick={() => setCurrentPage(p => Math.max(p - 1, 1))} 
+                            className="p-1.5 border rounded-md bg-white hover:bg-slate-50 disabled:opacity-30 transition shadow-sm"
+                        >
                             <ChevronLeft size={16} />
                         </button>
-                        <span>{currentPage} / {totalPages || 1}</span>
-                        <button onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} className="hover:bg-gray-400 p-1 rounded-4xl transition">
+                        
+                        <div className="px-3 py-1 bg-white border rounded-md text-xs font-bold text-blue-600 shadow-sm">
+                            {currentPage} / {totalPages || 1}
+                        </div>
+
+                        <button 
+                            disabled={currentPage === totalPages || totalPages === 0}
+                            onClick={() => setCurrentPage(p => Math.min(p + 1, totalPages))} 
+                            className="p-1.5 border rounded-md bg-white hover:bg-slate-50 disabled:opacity-30 transition shadow-sm"
+                        >
                             <ChevronRight size={16} />
                         </button>
-                        <button onClick={() => setCurrentPage(totalPages)} className="hover:bg-gray-400 p-1 rounded-4xl transition">
+                        <button 
+                            disabled={currentPage === totalPages || totalPages === 0}
+                            onClick={() => setCurrentPage(totalPages)} 
+                            className="p-1.5 border rounded-md bg-white hover:bg-slate-50 disabled:opacity-30 transition shadow-sm"
+                        >
                             <ChevronsRight size={16} />
                         </button>
                     </div>
                 </div>
+
             </div>
         </div>
     );

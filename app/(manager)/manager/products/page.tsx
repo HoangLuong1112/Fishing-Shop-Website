@@ -6,7 +6,7 @@ const MOCK_DATA: Product[] = [
     {id: "02",category_name: "Cần câu",product_name: "MacBook Air M2",description: "Mỏng nhẹ, hiệu năng vượt trội.",price: 24500000,stock_quantity: 0,image_url: "",status: false,},
 ];
 
-export default async function Page() {
+export default async function ProductsPage() {
     let products: Product[] = [];
 
     try {
