@@ -2,7 +2,7 @@ import Sidebar, { SidebarItem } from "@/app/components/Sidebar";
 
 const adminSidebar: SidebarItem[] = [
     { title: "Quản lý tài khoản", href: "/admin/accounts"},
-    { title: "Quản lý hệ thống", href: "/admin/system" },
+    // { title: "Quản lý hệ thống", href: "/admin/system" },
 ];
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

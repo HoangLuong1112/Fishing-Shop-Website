@@ -12,8 +12,9 @@ import { Badge } from "@/components/ui/badge";
 import { CalendarDays, Mail, User as UserIcon, Pencil } from "lucide-react";
 import { useAuth } from "@/app/provider/AuthProvider";
 import { useState } from "react";
-import { createClient } from "@/utils/supabase/client"; // nhớ import client
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import { updateUser, uploadAvatar } from "@/app/actions/accountAction";
 
 export default function ProfilePage() {
     const { user } = useAuth();
@@ -43,77 +44,68 @@ export default function ProfilePage() {
 
             let avatarUrl = profile.avatar_url;
 
-            const supabase = createClient();
+            // const supabase = createClient();
+            // if (newAvatar) {
+            //     const fileExt = newAvatar.name.split(".").pop() || "png";
+            //     const fileName = `avatars/${profile.id}-${Date.now()}.${fileExt}`;
+            //     const filePath = fileName;
+            //     if (newAvatar.size > 2 * 1024 * 1024) {
+            //         alert("Ảnh quá lớn (max 2MB)");
+            //         return;
+            //     }
+            //     if (!newAvatar.type.startsWith("image/")) {
+            //         alert("Chỉ được upload ảnh");
+            //         return;
+            //     }
+            //     const { error: uploadError } = await supabase.storage
+            //         .from("main") //bucket tên là main
+            //         .upload(filePath, newAvatar);
 
-            if (newAvatar) {
-                const fileExt = newAvatar.name.split(".").pop() || "png";
-                const fileName = `avatars/${profile.id}-${Date.now()}.${fileExt}`;
-                const filePath = fileName;
+            //     if (uploadError) throw uploadError;
+            //     const { data } = supabase.storage
+            //         .from("main")
+            //         .getPublicUrl(filePath);
 
-                if (newAvatar.size > 2 * 1024 * 1024) {
-                    alert("Ảnh quá lớn (max 2MB)");
-                    return;
-                }
+            //     const newAvatarUrl = data.publicUrl;
 
-                if (!newAvatar.type.startsWith("image/")) {
-                    alert("Chỉ được upload ảnh");
-                    return;
-                }
-
-                // upload avatar mới trước
-                const { error: uploadError } = await supabase.storage
-                    .from("main") //bucket tên là main
-                    .upload(filePath, newAvatar);
-
-                if (uploadError) throw uploadError;
-
-                // lấy public url
-                const { data } = supabase.storage
-                    .from("main")
-                    .getPublicUrl(filePath);
-
-                const newAvatarUrl = data.publicUrl;
-
-                // chỉ khi upload OK → mới xóa file cũ
-                if (profile.avatar_url) {
-                    const oldPath = profile.avatar_url
-                        ?.split("/storage/v1/object/public/main/")[1]
-                        ?.split("?")[0];
+            //     if (profile.avatar_url) {
+            //         const oldPath = profile.avatar_url
+            //             ?.split("/storage/v1/object/public/main/")[1]
+            //             ?.split("?")[0];
                     
-                    console.log("OLD URL:", profile.avatar_url);
-                    console.log("OLD PATH:", oldPath);
+            //         console.log("OLD URL:", profile.avatar_url);
+            //         console.log("OLD PATH:", oldPath);
 
-                    if (oldPath) {
-                        const { data: deleteData, error: deleteError } = await supabase.storage.from("main").remove([oldPath]);
+            //         if (oldPath) {
+            //             const { data: deleteData, error: deleteError } = await supabase.storage.from("main").remove([oldPath]);
 
-                        console.log("DELETE DATA:", deleteData);
-                        console.log("DELETE ERROR:", deleteError);
-                    }
-                }
+            //             console.log("DELETE DATA:", deleteData);
+            //             console.log("DELETE ERROR:", deleteError);
+            //         }
+            //     }
+            //     avatarUrl = newAvatarUrl;
+            // }
+            // console.log("Updating profile with username:", newUsername);
+            // // update DB
+            // const { error } = await supabase.from("User").update({username: newUsername,avatar_url: avatarUrl,}).eq("id", profile.id);
+            // if (error) throw error;
 
-                // update lại url mới
-                avatarUrl = newAvatarUrl;
+
+            // new ///
+            if (newAvatar) {
+                avatarUrl = await uploadAvatar(profile.id, newAvatar, profile.avatar_url);
             }
+            await updateUser(profile.id, {
+                username: newUsername,
+                avatar_url: avatarUrl
+            });
+            //////////
 
-            console.log("Updating profile with username:", newUsername);
-
-            // update DB
-            const { error } = await supabase
-                .from("User")
-                .update({
-                    username: newUsername,
-                    avatar_url: avatarUrl,
-                })
-                .eq("id", profile.id);
-
-            if (error) throw error;
-
-            alert("Cập nhật thành công!");
+            toast.success("Cập nhật thành công!");
             setIsEditing(false);
             router.refresh();
-        } catch (err) {
-            console.error(err);
-            alert("Có lỗi xảy ra!");
+        } catch (err: any) {
+            toast.error("Có lỗi xảy ra: ", err);
         } finally {
             setLoading(false);
         }
