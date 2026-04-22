@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
-import { Export } from "../(manager)/manager/stocks/export/page";
+import { Export } from "../utils/TypeGlobal";
 
 export async function getExports() {
     const supabase = await createClient();
@@ -49,7 +49,7 @@ export async function addExport(formData: Omit<Export, "id">) {
 export async function updateExport(id: string, formData: Partial<Export>) {
     const supabase = await createClient();
     
-    // Loại bỏ id và employee_name khỏi dữ liệu cập nhật
+    // bỏ id và employee_name khỏi dữ liệu cập nhật
     const { id: _id, ...updateData } = formData;
     
     const { data, error } = await supabase

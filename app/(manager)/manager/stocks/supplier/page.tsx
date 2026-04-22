@@ -1,13 +1,6 @@
 import { getSuppliers } from "@/app/actions/supplierAction"
 import SupplierInterface from "./SupplierInterface"
-
-export interface Supplier {
-    id: string
-    supplier_name: string
-    phone: string
-    email: string
-    address: string
-}
+import { Supplier } from "@/app/utils/TypeGlobal";
 
 const MOCK_DATA: Supplier[] = [];
 

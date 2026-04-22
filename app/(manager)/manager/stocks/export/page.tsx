@@ -3,14 +3,6 @@ import { getExports } from "@/app/actions/exportAction"
 import { getOrders } from "@/app/actions/orderAction"
 import ExportInterface from "./ExportInterface"
 
-export interface Export {
-    id: string
-    id_employee: string
-    id_order: string
-    export_date: string
-    note: string
-}
-
 export default async function ExportPage() {
     const [exports, orders, employees] = await Promise.all([
         getExports(),

@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
-import { UserProfile } from "../components/UserNavigation";
+import { UserProfile } from "../utils/TypeGlobal";
 
 export async function getUsers() {
     const supabase = await createClient();

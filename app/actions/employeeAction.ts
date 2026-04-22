@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
-import { Employee } from "../(manager)/manager/human-resources/EmployeeInterface";
+import { Employee } from "../utils/TypeGlobal";
 
 export async function getDepartments() {
     const supabase = await createClient();

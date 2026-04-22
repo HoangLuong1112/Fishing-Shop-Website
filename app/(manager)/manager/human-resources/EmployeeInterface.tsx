@@ -15,29 +15,9 @@ import {
     Mail
 } from "lucide-react";
 import Link from "next/link";
+import { Employee } from "@/app/utils/TypeGlobal";
 
-export interface Employee {
-    id: string;
-    id_user?: string;
-    id_department?: string;
-    id_position?: string;
-    employee_name: string;
-    profile_picture: string;
-    birthday: string;
-    gender: boolean;
-    cic: string;
-    tax_id: string;
-    marital_status: boolean;
-    address_p: string;
-    address_c: string;
-    phone: string;
-    email: string;
-    hired_date: string;
-    status: boolean;
-    department_name: string; //FK
-    position_name: string; //FK
-    base_salary: number; //FK
-}
+
 
 export default function EmployeeInterface({ initialData }: { initialData: Employee[] }) {
     const [employees] = useState<Employee[]>(initialData);

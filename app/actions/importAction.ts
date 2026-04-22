@@ -1,5 +1,5 @@
 import { createClient } from "@/utils/supabase/client";
-import { Import, ImportDetail } from "../(manager)/manager/stocks/import/page";
+import { Import, ImportDetail } from "../utils/TypeGlobal";
 
 export async function getImports() {
     const supabase = await createClient();

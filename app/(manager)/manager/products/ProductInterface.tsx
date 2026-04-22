@@ -13,18 +13,7 @@ import {
     XCircle
 } from "lucide-react";
 import Link from "next/link";
-
-export interface Product {
-    id: string;
-    id_category?: string;
-    category_name: string;
-    product_name: string;
-    description: string;
-    price: number;
-    stock_quantity: number;
-    image_url: string;
-    status: boolean;
-}
+import { Product } from "@/app/utils/TypeGlobal";
 
 export default function ProductPage({ initialData }: { initialData: Product[] }) {
 

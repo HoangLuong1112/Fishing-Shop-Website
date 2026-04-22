@@ -1,26 +1,6 @@
 import { getOrders } from "@/app/actions/orderAction"
 import OrderInterface from "./OrderInterface"
 
-export interface Order {
-    id: string
-    id_user: string
-    order_time: string
-    receiver_name: string
-    shipping_address: string
-    phone: string
-    status: string // approving, approved, shipping, success, cancelled
-    total_price: number
-}
-
-export interface OrderDetail {
-    id: string
-    id_order: string
-    id_product: string
-    quantity: number
-    price: number
-    product_name: string //FK, đã có getProduct
-}
-
 export default async function OrderPage() {
     const orders = await getOrders();
 

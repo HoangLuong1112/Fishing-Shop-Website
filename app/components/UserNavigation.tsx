@@ -23,16 +23,8 @@ import {
 } from "@/components/ui/avatar";
 import { useLogout } from "@/hooks/useLogout";
 import Link from "next/link";
+import { UserProfile } from "../utils/TypeGlobal";
 
-export type UserProfile = {
-    id?: string;
-    username?: string;
-    email?: string;
-    role?: string;
-    is_active?: boolean;
-    created_at?: string;
-    avatar_url?: string;
-}
 
 interface UserNavigationProps {
     user: {

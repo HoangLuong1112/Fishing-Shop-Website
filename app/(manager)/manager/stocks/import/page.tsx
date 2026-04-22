@@ -3,26 +3,6 @@ import ImportInterface from "./ImportInterface";
 import { getSuppliers } from "@/app/actions/supplierAction";
 import { getEmployees } from "@/app/actions/employeeAction";
 
-export interface Import {
-    id: string
-    id_supplier: string
-    id_employee: string
-    import_date: string
-    total_cost: number
-    note: string
-    supplier_name: string //FK, đã có getSupplier
-    employee_name: string //FK, đã có getEmployee
-}
-
-export interface ImportDetail {
-    id: string
-    id_import: string
-    id_product: string
-    quantity: number
-    import_price: number
-    product_name: string //FK, đã có getProduct
-}
-
 export default async function Page() {
     const [imports, suppliers, employees] = await Promise.all([
         getImports(),

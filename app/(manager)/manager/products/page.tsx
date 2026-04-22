@@ -1,5 +1,6 @@
 import { getProducts } from "@/app/actions/productAction";
-import ProductInterface, { Product } from "./ProductInterface";
+import ProductInterface from "./ProductInterface";
+import { Product } from "@/app/utils/TypeGlobal";
 
 const MOCK_DATA: Product[] = [
     {id: "01",category_name: "Cần câu",product_name: "iPhone 15 Pro",description: "Chip A17 Pro, khung Titan siêu bền.",price: 28990000,stock_quantity: 50,image_url: "https://picsum.photos/50",status: true,},

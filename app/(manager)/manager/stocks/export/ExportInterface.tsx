@@ -24,15 +24,14 @@ export default function ExportInterface({ initialData, employees, orders }: any)
     const [currentPage, setCurrentPage] = useState(1);
     const pageSize = 10;
 
-    // Logic: Lọc danh sách order cho thẻ Select
+    // Lọc danh sách order cho thẻ Select
     const availableOrders = useMemo(() => {
         if (form.id) {
-            // Nếu đang sửa: Hiện tất cả order (để tránh mất option hiện tại) 
-            // hoặc ít nhất là hiện order đang được chọn của phiếu này
+            // Nếu đang sửa: tắt luôn cái ô chọn đơn hàng
             return orders;
         }
-        // Nếu thêm mới: Chỉ hiện các đơn hàng có status là 'approving'
-        return orders.filter((o: any) => o.status === "approving");
+        // Nếu thêm mới // approving, approved, shipping, success, cancelled
+        return orders.filter((o: any) => o.status === "approved");
     }, [orders, form.id]);
 
     const handleSubmit = async (e: any) => {

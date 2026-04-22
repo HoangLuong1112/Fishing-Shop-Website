@@ -1,5 +1,6 @@
 import { getEmployees } from "@/app/actions/employeeAction";
-import EmployeeInterface, { Employee } from "./EmployeeInterface";
+import EmployeeInterface from "./EmployeeInterface";
+import { Employee } from "@/app/utils/TypeGlobal";
 
 const MOCK_DATA: Employee[] = [];
 

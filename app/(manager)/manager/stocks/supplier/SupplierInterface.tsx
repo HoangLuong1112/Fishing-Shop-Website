@@ -19,14 +19,7 @@ import {
 import { addSupplier, updateSupplier, deleteSupplier } from "@/app/actions/supplierAction";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
-
-export interface Supplier {
-    id: string;
-    supplier_name: string;
-    phone: string;
-    email: string;
-    address: string;
-}
+import { Supplier } from "@/app/utils/TypeGlobal";
 
 export default function SupplierInterface({ initialData }: { initialData: Supplier[] }) {
     const router = useRouter();

@@ -10,7 +10,9 @@ import {
     Clock, 
     ArrowRight,
     Phone,
-    MapPin
+    MapPin,
+    XCircle,
+    ClipboardList
 } from "lucide-react";
 import Link from "next/link";
 import { approveOrder } from "@/app/actions/orderAction";
@@ -21,11 +23,11 @@ export default function StocksDashboard({ initialOrders }: any) {
     const router = useRouter();
     const [loadingId, setLoadingId] = useState<string | null>(null);
 
-    const handleApprove = async (id: string) => {
+    const handleApprove = async (id: string, approve: boolean) => {
         setLoadingId(id);
         try {
-            await approveOrder(id);
-            toast.success(`Đã duyệt đơn hàng #${id}`);
+            await approveOrder(id, approve);
+            toast.success(`Đã ${approve ? 'duyệt' : 'hủy'} đơn hàng #${id}`);
             router.refresh();
         } catch (err: any) {
             toast.error(err.message);
@@ -116,14 +118,29 @@ export default function StocksDashboard({ initialOrders }: any) {
                                         <td className="p-4 text-center">
                                             <button
                                                 disabled={loadingId === order.id}
-                                                onClick={() => handleApprove(order.id)}
+                                                onClick={() => handleApprove(order.id, true)}
                                                 className="group relative bg-emerald-500 hover:bg-emerald-600 text-white p-2 rounded-xl transition-all shadow-lg shadow-emerald-100 disabled:opacity-50 inline-flex items-center gap-2 px-4"
                                             >
-                                                <CheckCircle2 size={16} />
-                                                <span className="text-[10px] font-black uppercase">
-                                                    {loadingId === order.id ? "Đang duyệt..." : "Duyệt đơn"}
-                                                </span>
+                                                {loadingId === order.id ? "..." : <CheckCircle2 size={16} />}
+                                                
+                                                {/* <span className="text-[10px] font-black uppercase">
+                                                    {loadingId === order.id ? "..." : ""}
+                                                </span> */}
                                             </button>
+                                            <button
+                                                disabled={loadingId === order.id}
+                                                onClick={() => handleApprove(order.id, false)}
+                                                className="group relative bg-red-500 hover:bg-red-600 text-white p-2 rounded-xl transition-all shadow-lg shadow-red-100 disabled:opacity-50 inline-flex items-center gap-2 px-4 mt-2"
+                                            >
+                                                <XCircle size={16} />
+                                                {/* <span className="text-[10px] font-black uppercase">
+                                                    {loadingId === order.id ? "..." : ""}
+                                                </span> */}
+                                            </button>
+                                            <Link href={`/manager/stocks/orders/${order.id}`} 
+                                                className="group relative bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-xl transition-all shadow-lg shadow-red-100 disabled:opacity-50 inline-flex items-center gap-2 px-4 mt-2">
+                                                <ClipboardList size={16} />
+                                            </Link>
                                         </td>
                                     </tr>
                                 ))}

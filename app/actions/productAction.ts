@@ -1,7 +1,5 @@
-// "use server";
-
 import { createClient } from "@/utils/supabase/client";
-import { Product } from "../(manager)/manager/products/ProductInterface";
+import { Product } from "../utils/TypeGlobal";
 
 export async function getCategories() {
     const supabase = await createClient();
