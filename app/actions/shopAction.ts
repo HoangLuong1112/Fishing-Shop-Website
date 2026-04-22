@@ -87,6 +87,10 @@ export async function getOrderHistory(userId: string) {
                     product_name,
                     image_url
                 )
+            ),
+            Export (
+                export_date,
+                note
             )
         `)
         .eq("id_user", userId)
@@ -97,5 +101,9 @@ export async function getOrderHistory(userId: string) {
         return [];
     }
 
-    return data;
+    // return data;
+    return data.map((order: any) => ({
+        ...order,
+        Export: order.Export?.[0] || null
+    }));
 }
