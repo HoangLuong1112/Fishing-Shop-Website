@@ -39,7 +39,7 @@ export default function StocksDashboard({ initialOrders }: any) {
     const navigationCards = [
         { title: "Nhập hàng", desc: "Quản lý phiếu nhập kho", icon: Box, color: "bg-blue-600", href: "/manager/stocks/import" },
         { title: "Xuất hàng", desc: "Quản lý phiếu xuất kho", icon: FileUp, color: "bg-orange-500", href: "/manager/stocks/export" },
-        { title: "Nhà cung cấp", desc: "Danh sách đối tác", icon: Truck, color: "bg-indigo-600", href: "/manager/human-resources" },
+        { title: "Nhà cung cấp", desc: "Danh sách đối tác", icon: Truck, color: "bg-indigo-600", href: "/manager/stocks/supplier" },
         { title: "Đơn hàng", desc: "Toàn bộ đơn khách hàng", icon: ShoppingCart, color: "bg-slate-800", href: "/manager/stocks/orders" },
     ];
 
