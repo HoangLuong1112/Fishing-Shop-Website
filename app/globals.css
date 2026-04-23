@@ -130,5 +130,5 @@
 }
 
 .spacing {
-  @apply px-10 lg:px-40 2xl:px-60;
+  @apply px-10 lg:px-20 2xl:px-34;
 }

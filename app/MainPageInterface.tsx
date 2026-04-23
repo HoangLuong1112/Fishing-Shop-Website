@@ -53,7 +53,7 @@ export default function MainPageInterface({ initialProducts, initialCategories }
                                 <span className="text-sm text-center font-medium text-gray-600 group-hover:text-blue-600 transition-colors">
                                     {cat.category_name}
                                 </span>
-                            </div>  
+                            </div>
                         ))}
                     </div>
                 </section>

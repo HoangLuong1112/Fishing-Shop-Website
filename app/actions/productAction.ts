@@ -103,3 +103,22 @@ export async function updateProduct(id: string, formData: Partial<Product>) {
 
     return data;
 }
+
+export async function searchProducts(query: string): Promise<Product[]> {
+    if (!query || query.trim().length === 0) return [];
+
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+        .from("Product")
+        .select("*")
+        .ilike("product_name", `%${query}%`)
+        .limit(5); // Giới hạn 5 kết quả cho thanh search nhanh
+
+    if (error) {
+        console.error("Search error:", error);
+        return [];
+    }
+
+    return data as Product[];
+}

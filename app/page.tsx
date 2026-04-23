@@ -44,7 +44,7 @@ export default async function HomePage() {
 	try {
 		categories = await getCategories();
 		products = await getSaleProducts();
-		console.log("Fetched sale products:", products)
+		// console.log("Fetched sale products:", products)
 
 		if (!categories || categories.length === 0) categories = MOCK_CATEGORIES;
 		if (!products || products.length === 0) products = MOCK_PRODUCTS;

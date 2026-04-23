@@ -6,6 +6,8 @@ import { AuthProvider } from "./provider/AuthProvider";
 import { createClient } from "@/utils/supabase/server";
 import { cookies } from "next/headers";
 import NavigationBar from "./components/NavigationBar";
+import { Playwrite_NZ_Guides } from 'next/font/google';
+import Footer from "./components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -15,6 +17,15 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const playwrite = Playwrite_NZ_Guides({
+//   subsets: ['latin'],
+	weight: ['400'],
+	variable: '--font-playwrite',
+	display: 'swap',	
+	fallback: ['cursive', 'sans-serif'],
+
 });
 
 export const metadata: Metadata = {
@@ -46,11 +57,12 @@ export default async function RootLayout({ children, }: Readonly<{ children: Rea
 	
 
 	return (
-		<html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+		<html lang="en" className={`${geistSans.variable} ${geistMono.variable} ${playwrite.variable} h-full antialiased`}>
 			<body className="min-h-full flex flex-col">
 				<AuthProvider initialUser={fullUser}>
 					<NavigationBar />
 					{children}
+					<Footer />
 				</AuthProvider>
 				<Toaster />
 			</body>

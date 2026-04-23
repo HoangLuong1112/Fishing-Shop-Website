@@ -29,10 +29,11 @@ import { UserProfile } from "../utils/TypeGlobal";
 interface UserNavigationProps {
     user: {
         profile : UserProfile;
-    };
+    },
+    isScrolled?: boolean
 }
 
-export default function UserNavigation({ user }: UserNavigationProps) {
+export default function UserNavigation({ user, isScrolled }: UserNavigationProps) {
     // console.log("UserNavigation rendered with user:", user);
     const { handleLogout } = useLogout()
 
@@ -40,7 +41,8 @@ export default function UserNavigation({ user }: UserNavigationProps) {
         <DropdownMenu>
             {/* Nút kích hoạt dạng viên thuốc */}
             <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-2 p-1 pr-3 rounded-full border border-gray-200 hover:bg-gray-50 transition-all shadow-sm focus:outline-none">
+                <button className={`flex items-center gap-2 p-1 pr-3 rounded-full border border-gray-200 hover:bg-gray-50 transition-all shadow-sm focus:outline-none
+                    ${isScrolled ? "bg-blue-950 text-white border-blue-950" : "bg-white text-black border-gray-200"}`}>
                 {/* Bên trái: Avatar */}
                 <Avatar className="h-8 w-8">
                     <AvatarImage src={user?.profile.avatar_url} alt={user?.profile.username} />
@@ -69,17 +71,17 @@ export default function UserNavigation({ user }: UserNavigationProps) {
 
                 <DropdownMenuGroup>
                     <Link href={'/profile'}>
-                    <DropdownMenuItem>
-                        
+                        <DropdownMenuItem>
                             <User className="mr-2 h-4 w-4" />
                             <span>Hồ sơ</span>
-                        
-                        
-                    </DropdownMenuItem></Link>
-                    <DropdownMenuItem>
-                        <Settings className="mr-2 h-4 w-4" />
-                        <span>Cài đặt</span>
-                    </DropdownMenuItem>
+                        </DropdownMenuItem>
+                    </Link>
+                    <Link href={'/history'}>
+                        <DropdownMenuItem>
+                            <Settings className="mr-2 h-4 w-4" />
+                            <span>Lịch sử mua hàng</span>
+                        </DropdownMenuItem>
+                    </Link>
                 </DropdownMenuGroup>
 
                 <DropdownMenuSeparator />
