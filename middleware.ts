@@ -73,6 +73,18 @@ export async function middleware(request: NextRequest) {
         return NextResponse.redirect(new URL('/', request.url))
     }
 
+    // employee guard
+    if (role === 'employee' &&
+        (
+            url.pathname.startsWith('/manager/products') ||
+            url.pathname.startsWith('/manager/human-resources') ||
+            url.pathname.startsWith('/manager/stocks') ||
+            url.pathname.startsWith('/manager/statistics')
+        )
+    ) {
+        return NextResponse.redirect(new URL('/manager', request.url))
+    }
+
     return response
 }
 

@@ -119,6 +119,27 @@ export async function addImportDetail(formData: Omit<ImportDetail, "id" | "produ
         }])
         .select();
 
+    const { data: product } = await supabase
+        .from("Product")
+        .select("stock_quantity")
+        .eq("id", formData.id_product)
+        .single()
+
+    if (!product) throw new Error("Product not found")
+
+    const newQuantity = product.stock_quantity + formData.quantity
+
+    await supabase
+    .from("Product")
+    .update({ stock_quantity: newQuantity })
+    .eq("id", formData.id_product)
+
+    // await supabase
+    //     .from("Product")
+    //     .update({ stock_quantity: formData.quantity + stock_quantity  })
+    //     .eq("id", formData.id_product)
+    //     .single();
+
     if (error) throw new Error(error.message);
 
     await updateImportTotalCost(formData.id_import);

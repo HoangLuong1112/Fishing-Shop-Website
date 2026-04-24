@@ -12,15 +12,28 @@ import {
     XCircle,
     UserCircle,
     Phone,
-    Mail
+    Mail,
+    Clock,
+    Check,
+    X,
+    Calculator,
+    Banknote
 } from "lucide-react";
 import Link from "next/link";
-import { Employee } from "@/app/utils/TypeGlobal";
+import { Employee, LeaveRequest } from "@/app/utils/TypeGlobal";
+import { useAuth } from "@/app/provider/AuthProvider";
+import { useRouter } from "next/navigation";
+import { updateLeaveStatus } from "@/app/actions/leaveAction";
 
 
 
-export default function EmployeeInterface({ initialData }: { initialData: Employee[] }) {
+export default function EmployeeInterface({ initialData, initialLeaveRequests, currentEmployee }: { initialData: Employee[], initialLeaveRequests: LeaveRequest[], currentEmployee: Employee | null }) {
+    const { user } = useAuth();
+    const router = useRouter();
     const [employees] = useState<Employee[]>(initialData);
+    const pendingRequests = useMemo(() => 
+        initialLeaveRequests.filter(r => r.status === "pending"), 
+    [initialLeaveRequests]);
 
     const [searchTerm, setSearchTerm] = useState("");
     const [deptFilter, setDeptFilter] = useState<string>("all");
@@ -32,6 +45,23 @@ export default function EmployeeInterface({ initialData }: { initialData: Employ
 
     const departments = useMemo(() => Array.from(new Set(employees.map(e => e.department_name))), [employees]);
     const positions = useMemo(() => Array.from(new Set(employees.map(e => e.position_name))), [employees]);
+
+    const handleApproveReject = async (requestId: string, status: "approved" | "rejected") => {
+        if (!user) return alert("Bạn cần đăng nhập!");
+        
+        const confirmMsg = status === "approved" ? "Duyệt đơn này?" : "Từ chối đơn này?";
+        if (!confirm(confirmMsg)) return;
+
+        try {
+            // Lưu ý: approverId ở đây cần là id_employee (int8) của Manager. 
+            // Nếu context user.id là uuid, bạn cần map nó sang id_employee tương ứng.
+            // Tạm thời tôi truyền user.id (nếu backend của bạn xử lý được uuid sang int8)
+            await updateLeaveStatus(requestId, currentEmployee?.id || '0', status);
+            router.refresh(); // Reload để cập nhật data mới từ server
+        } catch (error) {
+            alert("Lỗi khi cập nhật trạng thái đơn.");
+        }
+    };
 
     const filteredData = useMemo(() => {
         let result = [...employees];
@@ -94,6 +124,62 @@ export default function EmployeeInterface({ initialData }: { initialData: Employ
                 </Link>
             </div>
 
+            {pendingRequests.length > 0 && (
+                <div className="bg-white rounded-xl border border-amber-200 shadow-sm overflow-hidden">
+                    <div className="bg-amber-50 px-4 py-3 border-b border-amber-100 flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-amber-700 font-semibold">
+                            <Clock size={18} />
+                            <span>Đơn nghỉ phép chờ duyệt ({pendingRequests.length})</span>
+                        </div>
+                    </div>
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-sm text-left">
+                            <thead className="bg-slate-50 text-slate-600 font-medium border-b">
+                                <tr>
+                                    <th className="p-3">Nhân viên</th>
+                                    <th className="p-3">Loại</th>
+                                    <th className="p-3">Thời gian</th>
+                                    <th className="p-3">Lý do</th>
+                                    <th className="p-3 text-center">Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y">
+                                {pendingRequests.map((req) => (
+                                    <tr key={req.id} className="hover:bg-slate-50/50 transition-colors">
+                                        <td className="p-3 font-medium text-blue-600">{req.employee_name}</td>
+                                        <td className="p-3 capitalize">{req.type}</td>
+                                        <td className="p-3">
+                                            {new Date(req.start_date).toLocaleDateString('vi-VN')} - {new Date(req.end_date).toLocaleDateString('vi-VN')}
+                                        </td>
+                                        <td className="p-3 max-w-xs truncate text-slate-500" title={req.reason}>
+                                            {req.reason}
+                                        </td>
+                                        <td className="p-3">
+                                            <div className="flex justify-center gap-2">
+                                                <button 
+                                                    onClick={() => handleApproveReject(req.id, "approved")}
+                                                    className="p-1.5 bg-green-100 text-green-600 rounded-md hover:bg-green-200 transition"
+                                                    title="Duyệt"
+                                                >
+                                                    <Check size={16} />
+                                                </button>
+                                                <button 
+                                                    onClick={() => handleApproveReject(req.id, "rejected")}
+                                                    className="p-1.5 bg-red-100 text-red-600 rounded-md hover:bg-red-200 transition"
+                                                    title="Từ chối"
+                                                >
+                                                    <X size={16} />
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            )}
+
             {/* Toolbar */}
             <div className="bg-white p-3 rounded-xl border flex flex-wrap gap-3">
                 <div className="relative flex-1 min-w-75">
@@ -152,6 +238,7 @@ export default function EmployeeInterface({ initialData }: { initialData: Employ
                                 <th className="p-4 font-semibold text-slate-700">Phòng ban</th>
                                 <th className="p-4 font-semibold text-slate-700">Vị trí</th>
                                 <th className="p-4 font-semibold text-slate-700 text-center">Trạng thái</th>
+                                <th className="p-4 font-semibold text-slate-700 text-center">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -206,6 +293,16 @@ export default function EmployeeInterface({ initialData }: { initialData: Employ
                                                     <XCircle size={12} /> Nghỉ việc
                                                 </span>
                                             )}
+                                        </div>
+                                    </td>
+                                    <td className="p-4">
+                                        <div className="flex justify-center items-center gap-4">
+                                            <Link href={`/manager/human-resources/${emp.id}/salary`} className="text-blue-600 hover:text-blue-800 transition">
+                                                <Banknote size={20} />
+                                            </Link>
+                                            <Link href={`/manager/human-resources/${emp.id}/salary-calculate`} className="text-blue-600 hover:text-blue-800 transition">
+                                                <Calculator size={16} />
+                                            </Link>
                                         </div>
                                     </td>
                                 </tr>

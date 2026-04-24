@@ -12,6 +12,7 @@ import {
     Bell,
     LucideIcon 
 } from "lucide-react";
+import { useAuth } from "../provider/AuthProvider";
 
 export interface SidebarItem {
     title: string;
@@ -31,9 +32,22 @@ const defaultMenuItems: SidebarItem[] = [
     { title: "No Icon Item", href: "/no-icon" },
 ];
 
+
+const employeeSidebar: SidebarItem[] = [
+    { title: "Back to Dashboard", href: "/manager"},
+    { title: "Xem lương", href: "/manager/salary" },
+];
+
+
 export default function Sidebar({ data = defaultMenuItems }: SidebarProps) {
     const [isCollapsed, setIsCollapsed] = useState(false);
     const pathname = usePathname();
+
+    const {user} = useAuth()
+
+    if( user?.profile?.role === 'employee') {
+        data = employeeSidebar
+    }
 
     return (
         <aside className={`relative flex flex-col bg-slate-900 text-slate-300 transition-all duration-300 ease-in-out min-h-screen border-r border-slate-800 
@@ -43,7 +57,7 @@ export default function Sidebar({ data = defaultMenuItems }: SidebarProps) {
             <div className="flex items-center justify-between p-4 h-16 border-b border-slate-800">
                 {!isCollapsed && (
                     <span className="font-bold text-xl text-white truncate animate-in fade-in duration-500">
-                        Admin Panel
+                        Control Panel
                     </span>
                 )}
                 <button onClick={() => setIsCollapsed(!isCollapsed)} className="p-2 rounded-lg hover:bg-slate-800 transition-colors ml-auto text-slate-400 hover:text-white">

@@ -54,10 +54,6 @@ export default function LoginForm({ action }: { action: (formData: FormData) => 
                     <label className="text-lg">Mật khẩu</label>
                     <input name="password" type="password" required className="text-lg bg-white h-11 w-full px-2" />
                 </div>
-                <div className="flex items-center text-sm mt-1">
-                    <input type="checkbox" />
-                    <span className="ml-2">Ghi nhớ đăng nhập</span>
-                </div>
 
                 <button 
                     type="submit"

@@ -143,3 +143,35 @@ export async function updateEmployee(id: string, formData: Partial<Employee>) {
     if (error) throw new Error(error.message);
     return data;
 }
+
+export async function getEmployeeByUserId(userId: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("Employee")
+        .select(`
+            *,
+            Department(department_name),
+            Position(position_name, base_salary)
+        `)
+        .eq("id_user", userId)
+        .single();
+
+    if (error) return null;
+    return data;
+}
+
+export async function getEmployeeByEmployeeId(employeeId: string) {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+        .from("Employee")
+        .select(`
+            *,
+            Department(department_name),
+            Position(position_name, base_salary)
+        `)
+        .eq("id", employeeId)
+        .single();
+
+    if (error) return null;
+    return data;
+}

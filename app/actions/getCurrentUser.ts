@@ -22,3 +22,22 @@ export async function getCurrentUser() {
         profile,
     }
 }
+
+export async function getCurrentEmployee() {
+    const cookieStore = await cookies()
+    const supabase = createClient(cookieStore)
+    const user = await getCurrentUser()
+
+    const { data, error } = await supabase
+        .from("Employee")
+        .select(`
+            *,
+            Department(department_name),
+            Position(position_name, base_salary)
+        `)
+        .eq("id_user", user?.id)
+        .single();
+
+    if (error) return null;
+    return data;
+}

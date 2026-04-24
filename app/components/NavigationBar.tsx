@@ -33,6 +33,13 @@ export default function NavigationBar() {
         };
     }, []);
 
+    console.log("testing:" ,user?.profile?.role || 'no role')
+
+    let managerPanel = false
+    if(user?.profile?.role === 'manager' || user?.profile?.role === 'admin' || user?.profile?.role === 'employee') {
+        managerPanel = true
+    }
+
     return (
         <>
             <div className={`mb-16 ${hide ? "hidden" : ""}`} />
@@ -57,7 +64,7 @@ export default function NavigationBar() {
                         <div className="flex justify-end items-center gap-4 text-black">
                             {user ? (
                                 <>
-                                    {user.profile.role === "manager" || user.profile.role === "admin" && (
+                                    {managerPanel && (
                                         <Link href={'/manager'} className="px-4 py-2 bg-neutral-50 hover:bg-neutral-200 border border-black rounded-full font-bold">
                                             Manager
                                         </Link>

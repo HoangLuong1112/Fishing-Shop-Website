@@ -29,7 +29,7 @@ export default async function EmployeeDetailPage({ params }: Props) {
 
     return (
         <div className="p-6">
-            <h1 className="text-4xl font-bold mb-10">Sửa sản phẩm</h1>
+            <h1 className="text-4xl font-bold mb-10">Thông tin nhân viên</h1>
             <EmployeeForm initialData={employee} departments={departments} positions={positions} isEdit />
         </div>
     );
