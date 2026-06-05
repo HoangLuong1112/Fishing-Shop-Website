@@ -54,6 +54,8 @@ export default function DashboardInterface({ employee, initialLeaveRequests }: P
     return (
         <div className="p-6 max-w-6xl mx-auto space-y-8 bg-slate-50 min-h-screen">
             {/* 1. Profile Header Section */}
+            <p className="text-3xl font-bold">Welcome to dashboard, mr {employee.employee_name}</p>
+
             <div className="bg-white rounded-2xl shadow-sm border p-6 flex flex-col md:flex-row gap-8 items-start">
                 <div className="relative group">
                     <img 
