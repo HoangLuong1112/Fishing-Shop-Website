@@ -6,7 +6,6 @@ const managerSidebar: SidebarItem[] = [
     { title: "Quản lý sản phẩm", href: "/manager/products"},
     { title: "Quản lý nhân sự", href: "/manager/human-resources" },
     { title: "Quản lý đơn hàng/kho", href: "/manager/stocks" },
-    { title: "Xem lương", href: "/manager/salary" },
     { title: "Thống kê", href: "/manager/statistics" }, 
 ];
 

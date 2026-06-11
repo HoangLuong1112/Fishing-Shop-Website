@@ -99,19 +99,6 @@ export interface Export {
     note: string
 }
 
-export interface LeaveRequest {
-    id: string
-    id_employee: string
-    approved_by: string
-    type: string        // sick, vacation, maternity, else
-    start_date: string
-    end_date: string
-    reason: string
-    status: string      // pending, approved, rejected
-    employee_name: string //FK
-    approver_name: string //FK
-}
-
 export interface PositionHistory {
     id: string
     id_employee: string
@@ -120,22 +107,4 @@ export interface PositionHistory {
     end_date: string
     employee_name: string //FK
     position_name: string //FK
-}
-
-export interface Salary {
-    id: string
-    id_employee: string
-    month: string
-    year: string
-    final_salary: number
-    employee_name: string //FK
-}
-
-export interface SalaryDetail {
-    id: string
-    id_salary: string
-    detail: string
-    detail_calculation: string //add +, sub -, none
-    amount: number
-    note: string
 }

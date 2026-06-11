@@ -1,14 +1,12 @@
 import { getEmployeeByUserId, getEmployees } from "@/app/actions/employeeAction";
 import EmployeeInterface from "./EmployeeInterface";
-import { Employee, LeaveRequest } from "@/app/utils/TypeGlobal";
-import { getLeaveRequests } from "@/app/actions/leaveAction";
+import { Employee } from "@/app/utils/TypeGlobal";
 import { getCurrentUser } from "@/app/actions/getCurrentUser";
 
 const MOCK_DATA: Employee[] = [];
 
 export default async function HumanResourcesPage() {
     let employees: Employee[] = [];
-    let leaveRequests: LeaveRequest[] = [];
     let currentEmployee: Employee | null = null;
     
     try {
@@ -20,9 +18,6 @@ export default async function HumanResourcesPage() {
             employees = data;
         }   
 
-        const leaveData = await getLeaveRequests()
-        leaveRequests = leaveData || [];
-
         const user = await getCurrentUser()
         const employeeData = await getEmployeeByUserId(user?.id || "");
         currentEmployee = employeeData || null;
@@ -31,5 +26,5 @@ export default async function HumanResourcesPage() {
         employees = MOCK_DATA;
     }
 
-    return <EmployeeInterface initialData={employees} initialLeaveRequests={leaveRequests} currentEmployee={currentEmployee}/>;
+    return <EmployeeInterface initialData={employees} currentEmployee={currentEmployee}/>;
 }

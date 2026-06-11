@@ -1,5 +1,4 @@
 import { getEmployees } from "@/app/actions/employeeAction";
-import { getAllSalaryHistory, getSalaryHistory } from "@/app/actions/salaryAction";
 import { getProducts } from "@/app/actions/productAction";
 import { getOrders } from "@/app/actions/orderAction"; // Giả định bạn đã có hàm này
 import { getImports } from "@/app/actions/importAction"; // Giả định bạn đã có hàm này
@@ -7,9 +6,8 @@ import StatisticsInterface from "./StatisticsInterface";
 
 export default async function AnalyticsPage() {
     // Fetch toàn bộ data để tính toán thống kê
-    const [employees, salaries, products, orders, imports] = await Promise.all([
+    const [employees, products, orders, imports] = await Promise.all([
         getEmployees(),
-        getAllSalaryHistory(), // Cần chỉnh sửa action để lấy toàn bộ nếu truyền "all"
         getProducts(),
         getOrders(), 
         getImports()
@@ -21,7 +19,6 @@ export default async function AnalyticsPage() {
                 
                 <StatisticsInterface 
                     employees={employees}
-                    salaries={salaries}
                     products={products}
                     orders={orders}
                     imports={imports}
